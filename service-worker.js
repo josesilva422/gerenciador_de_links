@@ -1,4 +1,4 @@
-const CACHE_NAME = "comurg-portal-v4";
+const CACHE_NAME = "comurg-portal-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,6 +11,8 @@ const APP_SHELL = [
   "./icons/logo-comurg.png",
   "./icons/logo-remove.png",
   "./icons/logo-opev.png",
+  "./icons/logo-urbantrim.png",
+  "./icons/logo-pesocerto.png",
 ];
 
 self.addEventListener("install", (event) => {

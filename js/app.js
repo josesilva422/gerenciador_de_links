@@ -46,12 +46,28 @@ function setupSearch() {
 function setupInstallPrompt() {
   const btn = document.getElementById("install-btn");
   const iosHint = document.getElementById("ios-hint");
+  const genericHint = document.getElementById("generic-install-hint");
   let deferredPrompt = null;
+
+  // Já instalado (rodando em modo standalone): não mostra nada.
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+  if (isStandalone) return;
+
+  const ua = window.navigator.userAgent;
+  // iPadOS 13+ se identifica como "MacIntel" com suporte a touch.
+  const isIOS =
+    /iphone|ipad|ipod/i.test(ua) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isMobile =
+    isIOS || /android/i.test(ua) || (navigator.maxTouchPoints > 0 && window.innerWidth < 900);
 
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
     btn.classList.add("visible");
+    genericHint.classList.remove("visible");
   });
 
   btn.addEventListener("click", async () => {
@@ -64,14 +80,20 @@ function setupInstallPrompt() {
 
   window.addEventListener("appinstalled", () => {
     btn.classList.remove("visible");
+    genericHint.classList.remove("visible");
   });
 
-  // iOS Safari não suporta beforeinstallprompt: mostra instrução manual.
-  const isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-  const isInStandaloneMode =
-    "standalone" in window.navigator && window.navigator.standalone;
-  if (isIOS && !isInStandaloneMode) {
+  if (isIOS) {
+    // iOS nunca dispara beforeinstallprompt: instrução manual é o único caminho.
     iosHint.classList.add("visible");
+  } else if (isMobile) {
+    // Android/outros: dá um tempo para o beforeinstallprompt disparar.
+    // Se não disparar (heurística do navegador, engajamento, etc.), mostra instrução manual.
+    setTimeout(() => {
+      if (!deferredPrompt) {
+        genericHint.classList.add("visible");
+      }
+    }, 2500);
   }
 }
 
