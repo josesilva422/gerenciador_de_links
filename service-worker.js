@@ -1,4 +1,4 @@
-const CACHE_NAME = "comurg-portal-v5";
+const CACHE_NAME = "comurg-portal-v6";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -33,24 +33,27 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Só faz cache do "shell" do próprio portal (mesma origem).
+// Só cuida do "shell" do próprio portal (mesma origem).
 // Links externos das plataformas seguem direto para a rede.
+// Estratégia "network-first": sempre tenta buscar a versão mais nova primeiro
+// (assim quem já tem o app aberto/instalado vê as plataformas novas na hora),
+// e só usa o cache como reserva quando está offline.
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return (
-        cached ||
-        fetch(event.request)
-          .then((response) => {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-            return response;
-          })
-          .catch(() => caches.match("./index.html"))
-      );
-    })
+    fetch(event.request)
+      .then((response) => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        return response;
+      })
+      .catch(() =>
+        caches
+          .match(event.request)
+          .then((cached) => cached || caches.match("./index.html"))
+      )
   );
 });

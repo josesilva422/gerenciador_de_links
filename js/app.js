@@ -98,11 +98,22 @@ function setupInstallPrompt() {
 }
 
 function registerServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
-    });
-  }
+  if (!("serviceWorker" in navigator)) return;
+
+  // Quando uma nova versão do service worker assume o controle da página,
+  // recarrega uma única vez para garantir que o HTML/JS/CSS mais novos sejam
+  // exibidos (sem isso, quem já tinha o site aberto/instalado ficava preso
+  // numa versão antiga até fechar e abrir de novo).
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (refreshing) return;
+    refreshing = true;
+    window.location.reload();
+  });
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
