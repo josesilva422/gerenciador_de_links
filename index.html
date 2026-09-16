@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Portal de Plataformas Comurg</title>
+  <meta name="description" content="Acesso rápido a todas as plataformas e sistemas web da Comurg em um só lugar." />
+  <meta name="theme-color" content="#005f27" />
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Comurg" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="accent-bar"></div>
+  <div class="container">
+    <header class="top">
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="icons/logo-comurg.png" alt="Comurg" />
+        </div>
+        <div class="brand-text">
+          <h1>Portal de Plataformas</h1>
+          <p>Comurg &middot; acesso rápido aos sistemas</p>
+        </div>
+      </div>
+      <button id="install-btn" type="button">
+        <span>&#8681;</span> Instalar aplicativo
+      </button>
+    </header>
+
+    <div id="ios-hint" class="ios-hint">
+      <strong>Instalar no iPhone/iPad:</strong> toque em
+      <strong>Compartilhar</strong> (&#9099;) e depois em
+      <strong>"Adicionar à Tela de Início"</strong>.
+    </div>
+
+    <div class="search-wrap">
+      <input
+        id="search"
+        type="search"
+        placeholder="Buscar plataforma..."
+        autocomplete="off"
+      />
+    </div>
+
+    <main>
+      <div id="grid" class="grid"></div>
+      <p id="empty-state" class="empty-state">Nenhuma plataforma encontrada.</p>
+    </main>
+
+    <footer>
+      Portal interno de links &middot; Comurg
+    </footer>
+  </div>
+
+  <script src="js/tools.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
