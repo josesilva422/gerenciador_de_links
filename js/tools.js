@@ -42,6 +42,7 @@ const TOOLS = [
     name: "PMTF",
     desc: "Gerenciamento da Pintura de Meio-Fio",
     url: "https://pmtf-comurg.netlify.app/",
+    icon: "icons/icon-meiofio.png",
     initials: "PM",
     color: "#f2b705",
   },
