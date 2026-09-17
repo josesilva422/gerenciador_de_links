@@ -37,4 +37,12 @@ const TOOLS = [
     initials: "PC",
     color: "#005f27",
   },
+  {
+    id: "pmtf",
+    name: "PMTF",
+    desc: "Gerenciamento da Pintura de Meio-Fio",
+    url: "https://pmtf-comurg.netlify.app/",
+    initials: "PM",
+    color: "#f2b705",
+  },
 ];
